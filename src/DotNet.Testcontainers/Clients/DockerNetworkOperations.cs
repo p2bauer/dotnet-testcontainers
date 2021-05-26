@@ -13,22 +13,20 @@ namespace DotNet.Testcontainers.Clients
 
     public async Task<string> CreateNetworkAsync(string name, CancellationToken ct = default)
     {
-      try
+      var response = await this.Docker.Networks.CreateNetworkAsync(new NetworksCreateParameters
       {
-        var response = await this.Docker.Networks.CreateNetworkAsync(new NetworksCreateParameters
-        {
-          Name = name
-        }, ct).ConfigureAwait(false);
+        Name = name
+      }, ct).ConfigureAwait(false);
 
-        if (response == null)
-          throw new Exception("CreateNetworkAsync returned null");
+      if (response == null)
+        throw new Exception("CreateNetworkAsync returned null");
 
-        return response.ID;
-      }
-      catch (Exception ex)
-      {
-        throw;
-      }
+      return response.ID;
+    }
+
+    public async Task DeleteNetworkAsync(string networkId, CancellationToken ct = default)
+    {
+      await this.Docker.Networks.DeleteNetworkAsync(networkId, ct);
     }
   }
 }

@@ -214,5 +214,10 @@ namespace DotNet.Testcontainers.Clients
     {
       return this.network.CreateNetworkAsync(name, ct);
     }
+
+    public Task DeleteNetworkAsync(string networkId, CancellationToken ct = default)
+    {
+      return this.network.DeleteNetworkAsync(networkId, ct);
+    }
   }
 }
