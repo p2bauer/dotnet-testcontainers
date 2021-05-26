@@ -213,6 +213,9 @@ namespace DotNet.Testcontainers.Containers.Builders
     [PublicAPI]
     ITestcontainersBuilder<TDockerContainer> WithStartupCallback(Func<IRunningDockerContainer, CancellationToken, Task> startupCallback);
 
+    [PublicAPI]
+    ITestcontainersBuilder<TDockerContainer> WithNetwork(string networkId);
+
     /// <summary>
     /// Builds the instance of <see cref="IDockerContainer" /> with the given configuration.
     /// </summary>

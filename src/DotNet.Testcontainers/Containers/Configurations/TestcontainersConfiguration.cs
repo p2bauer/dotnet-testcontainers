@@ -19,6 +19,7 @@ namespace DotNet.Testcontainers.Containers.Configurations
       IDockerImage image,
       string name,
       string hostname,
+      string networkId, 
       string workingDirectory,
       IEnumerable<string> entrypoint,
       IEnumerable<string> command,
@@ -38,6 +39,7 @@ namespace DotNet.Testcontainers.Containers.Configurations
       this.Image  = image;
       this.Name  = name;
       this.Hostname = hostname;
+      this.NetworkId = networkId;
       this.WorkingDirectory  = workingDirectory;
       this.Entrypoint  = entrypoint;
       this.Command  = command;
@@ -70,6 +72,9 @@ namespace DotNet.Testcontainers.Containers.Configurations
 
     /// <inheritdoc />
     public string Hostname { get; }
+
+    /// <inheritdoc />
+    public string NetworkId { get; }
 
     /// <inheritdoc />
     public string WorkingDirectory { get; }
