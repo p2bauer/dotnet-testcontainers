@@ -188,6 +188,12 @@ namespace DotNet.Testcontainers.Containers.Builders
     }
 
     /// <inheritdoc />
+    public ITestcontainersBuilder<TDockerContainer> WithNetwork(string networkId)
+    {
+      return Build(this, Apply(networkId: networkId));
+    }
+
+    /// <inheritdoc />
     public TDockerContainer Build()
     {
       // Create container instance.
@@ -206,6 +212,7 @@ namespace DotNet.Testcontainers.Containers.Builders
       IAuthenticationConfiguration authConfig = null,
       IDockerImage image = null,
       string name = null,
+      string networkId = null,
       string workingDirectory = null,
       IEnumerable<string> entrypoint = null,
       IEnumerable<string> command = null,
@@ -223,6 +230,7 @@ namespace DotNet.Testcontainers.Containers.Builders
         authConfig,
         image,
         name,
+        networkId, 
         workingDirectory,
         entrypoint,
         command,
@@ -247,6 +255,7 @@ namespace DotNet.Testcontainers.Containers.Builders
       var endpoint = Merge(next.Endpoint, previous.configuration.Endpoint, DockerApiEndpoint.Local);
       var image = Merge(next.Image, previous.configuration.Image);
       var name = Merge(next.Name, previous.configuration.Name);
+      var networkId = Merge(next.NetworkId, previous.configuration.NetworkId);
       var workingDirectory = Merge(next.WorkingDirectory, previous.configuration.WorkingDirectory);
       var entrypoint = Merge(next.Entrypoint, previous.configuration.Entrypoint);
       var command = Merge(next.Command, previous.configuration.Command);
@@ -265,6 +274,7 @@ namespace DotNet.Testcontainers.Containers.Builders
         authConfig,
         image,
         name,
+        networkId, 
         workingDirectory,
         entrypoint,
         command,

@@ -12,7 +12,7 @@ namespace DotNet.Testcontainers.Clients
   using DotNet.Testcontainers.Images.Configurations;
   using DotNet.Testcontainers.Services;
 
-  internal sealed class TestcontainersClient : ITestcontainersClient
+  public sealed class TestcontainersClient : ITestcontainersClient
   {
     private readonly string osRootDirectory = Path.GetPathRoot(typeof(ITestcontainersClient).Assembly.Location);
 
@@ -26,6 +26,8 @@ namespace DotNet.Testcontainers.Clients
 
     private readonly IDockerSystemOperations system;
 
+    private readonly IDockerNetworkOperations network;
+
     public TestcontainersClient() : this(
       DockerApiEndpoint.Local)
     {
@@ -35,7 +37,8 @@ namespace DotNet.Testcontainers.Clients
       new TestcontainersRegistryService(),
       new DockerContainerOperations(endpoint),
       new DockerImageOperations(endpoint),
-      new DockerSystemOperations(endpoint))
+      new DockerSystemOperations(endpoint),
+      new DockerNetworkOperations(endpoint))
     {
       this.endpoint = endpoint;
     }
@@ -44,12 +47,14 @@ namespace DotNet.Testcontainers.Clients
       TestcontainersRegistryService registryService,
       IDockerContainerOperations containerOperations,
       IDockerImageOperations imageOperations,
-      IDockerSystemOperations systemOperations)
+      IDockerSystemOperations systemOperations,
+      IDockerNetworkOperations networkOperations)
     {
       this.registryService = registryService;
       this.containers = containerOperations;
       this.images = imageOperations;
       this.system = systemOperations;
+      this.network = networkOperations;
 
       AppDomain.CurrentDomain.ProcessExit += this.PurgeOrphanedContainers;
       Console.CancelKeyPress += this.PurgeOrphanedContainers;
@@ -158,6 +163,16 @@ namespace DotNet.Testcontainers.Clients
     {
       var arguments = new PurgeOrphanedContainersArgs(this.endpoint, this.registryService.GetRegisteredContainers());
       new Process { StartInfo = { FileName = "docker", Arguments = arguments.ToString() } }.Start();
+    }
+
+    public Task<string> CreateNetworkAsync(string name, CancellationToken ct = default)
+    {
+      return this.network.CreateNetworkAsync(name, ct);
+    }
+
+    public Task DeleteNetworkAsync(string networkId, CancellationToken ct = default)
+    {
+      return this.network.DeleteNetworkAsync(networkId, ct);
     }
   }
 }

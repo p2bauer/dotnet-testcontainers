@@ -42,6 +42,12 @@ namespace DotNet.Testcontainers.Containers.Configurations
     string Name { get; }
 
     /// <summary>
+    /// Gets the network id.
+    /// </summary>
+    [NotNull]
+    string NetworkId { get; }
+
+    /// <summary>
     /// Gets the working directory.
     /// </summary>
     [NotNull]

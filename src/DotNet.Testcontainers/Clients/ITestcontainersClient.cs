@@ -23,6 +23,23 @@ namespace DotNet.Testcontainers.Clients
     Task<bool> GetIsWindowsEngineEnabled(CancellationToken ct = default);
 
     /// <summary>
+    /// Create network
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    Task<string> CreateNetworkAsync(string name, CancellationToken ct = default);
+
+    /// <summary>
+    /// Delete network
+    /// </summary>
+    /// <param name="networkId"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    Task DeleteNetworkAsync(string networkId, CancellationToken ct = default);
+
+
+    /// <summary>
     /// Gets the Testcontainer exit code.
     /// </summary>
     /// <param name="id">Docker container id.</param>
