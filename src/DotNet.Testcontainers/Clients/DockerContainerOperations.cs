@@ -129,18 +129,6 @@ namespace DotNet.Testcontainers.Clients
         Mounts = converter.Mounts,
       };
 
-      var networkConfig = new NetworkingConfig
-      {
-        EndpointsConfig = new Dictionary<string, EndpointSettings>
-        {
-          { "isolated_nw", new EndpointSettings
-            {
-              NetworkID = configuration.NetworkId
-            }
-          }
-        }
-      };
-
       var createParameters = new CreateContainerParameters
       {
         Image = configuration.Image.FullName,
@@ -151,9 +139,22 @@ namespace DotNet.Testcontainers.Clients
         Env = converter.Environments,
         Labels = converter.Labels,
         ExposedPorts = converter.ExposedPorts,
-        HostConfig = hostConfig,
-        NetworkingConfig = networkConfig
+        HostConfig = hostConfig
       };
+
+      if (!string.IsNullOrEmpty(configuration.NetworkId))
+      {
+        createParameters.NetworkingConfig = new NetworkingConfig
+        {
+          EndpointsConfig = new Dictionary<string, EndpointSettings>
+          {
+            {
+              "isolated_nw",
+              new EndpointSettings { NetworkID = configuration.NetworkId }
+            }
+          }
+        };
+      }
 
       var id = (await this.Docker.Containers.CreateContainerAsync(createParameters, ct)
         .ConfigureAwait(false)).ID;
